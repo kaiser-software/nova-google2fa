@@ -37,7 +37,7 @@
         </div>
 
         <form id="register_form" class="bg-white shadow rounded-lg p-8 max-w-xl mx-auto" method="POST"
-              action="los/2fa/confirm">
+              action="confirm">
             @csrf
             <h2 class="p-2">Two Factor Authentication</h2>
 
@@ -53,7 +53,7 @@
                 </ol>
             </strong>
             <div class="text-center">
-                <img src="{{ $google2fa_url }}" alt="">
+                <img src="data:image/png;base64, {{ $qrcode_image }}" alt="">
             </div>
 
             <div class="text-center">
