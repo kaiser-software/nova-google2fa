@@ -38,7 +38,7 @@
         </div>
 
         <form id="authenticate_form" class="bg-white shadow rounded-lg p-8 max-w-xl mx-auto" method="POST"
-              action="nova/los/2fa/authenticate">
+              action="los/2fa/authenticate">
             @csrf
             <h2 class="p-2">Two Factor Authentication</h2>
 

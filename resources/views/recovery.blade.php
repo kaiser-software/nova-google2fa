@@ -36,7 +36,7 @@
             @include('nova::partials.logo')
         </div>
 
-        <form class="bg-white shadow rounded-lg p-8 max-w-xl mx-auto" method="POST" action="nova/los/2fa/register">
+        <form class="bg-white shadow rounded-lg p-8 max-w-xl mx-auto" method="POST" action="los/2fa/register">
             <h2 class="p-2">Recovery codes</h2>
             @csrf
             <p class="p-2">
