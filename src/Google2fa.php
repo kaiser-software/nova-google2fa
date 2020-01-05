@@ -7,7 +7,7 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Laravel\Nova\Tool;
-use PragmaRX\Google2FA\Google2FA as G2fa;
+use PragmaRX\Google2FAQRCode\Google2FA as G2fa;
 use PragmaRX\Recovery\Recovery;
 use Request;
 
@@ -40,22 +40,16 @@ class Google2fa extends Tool
     protected function getQRCode()
     {
         $google2fa = new G2fa();
-        $google2fa->setAllowInsecureCallToGoogleApis(true);
 
-        $google2fa_url = $google2fa->getQRCodeUrl(
-            'pragmarx',
-            'google2fa@pragmarx.com',
-            $google2fa->generateSecretKey()
+        $google2fa_url = $google2fa->getQRCodeInline(
+            config('lifeonscreen2fa.company'),
+            auth()->user()->email,
+            auth()->user()->user2fa->google2fa_secret
         );
 
-        $writer = new Writer(
-            new ImageRenderer(
-                new RendererStyle(400),
-                new ImagickImageBackEnd()
-            )
-        );
+        return $google2fa_url;
 
-        return base64_encode($writer->writeString($google2fa_url));
+//        return base64_encode($writer->writeString($google2fa_url));
     }
 
     /**

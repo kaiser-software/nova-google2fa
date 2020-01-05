@@ -8,6 +8,11 @@ return [
      */
     'enabled' => env('GOOGLE_2FA_ENABLED', true),
 
+    /**
+     * Company name for generating QR Codes
+     */
+    'company' => 'pragmarx',
+
     'models' => [
         /**
          * Change this variable to path to user model.
