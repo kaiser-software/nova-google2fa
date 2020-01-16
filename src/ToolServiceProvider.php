@@ -21,13 +21,21 @@ class ToolServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             // Publishing the configuration file.
             $this->publishes([
-                __DIR__ . '/../config/lifeonscreen2fa.php' => config_path('lifeonscreen2fa.php'),
+                __DIR__ . '/../config/nova-google2fa.php' => config_path('nova-google2fa.php'),
             ], 'lifeonscreen2fa.config');
 
             // Publishing the migrations.
             $this->publishes([
                 __DIR__.'/../database/migrations/' => database_path('migrations')
             ], 'migrations');
+
+            $this->publishes([
+                __DIR__.'/../resources/js/nova-google2fa.js' => public_path('vendor/nova-google2fa/nova-google2fa.js')
+            ],  ['public', 'nova-google2fa']);
+
+            $this->publishes([
+                __DIR__ . '/../resources/css/tool.css' => public_path('vendor/nova-google2fa/nova-google2fa.css')
+            ],  ['public', 'nova-google2fa']);
         }
 
         $this->app->booted(function () {
@@ -59,6 +67,6 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/lifeonscreen2fa.php', 'lifeonscreen2fa');
+        $this->mergeConfigFrom(__DIR__ . '/../config/nova-google2fa.php', 'lifeonscreen2fa');
     }
 }

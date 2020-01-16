@@ -9,25 +9,10 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('app.css', 'vendor/nova') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/nova-google2fa/nova-google2fa.css') }}">
 
-    <style>
-        body {
-            font-family: "Montserrat", sans-serif !important;
-        }
-
-        .btn,
-        .form-input,
-        .rounded-lg {
-            border-radius: 0 !important;
-        }
-        @media print
-        {
-            .no-print, .no-print *
-            {
-                display: none !important;
-            }
-        }
-    </style>
+    <!-- JS -->
+    <script type="application/javascript" src="{{ asset('vendor/nova-google2fa/nova-google2fa.js') }}"></script>
 </head>
 <body class="bg-40 text-black h-full">
 <div class="h-full">
