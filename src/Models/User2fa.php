@@ -23,4 +23,21 @@ class User2fa extends Model
     {
         return $this->belongsTo(config('lifeonscreen2fa.models.user'));
     }
+
+    /**
+     * @return mixed
+     */
+    public function hashRecoveryCodes($codes = [])
+    {
+        if(empty($codes)) {
+            throw new \Exception('No recovery codes given. Hashing failed');
+        }
+
+        $recoveryHashes = $codes;
+        array_walk($recoveryHashes, function (&$value) {
+            $value = password_hash($value, config('lifeonscreen2fa.recovery_codes.hashing_algorithm'));
+        });
+
+        return $recoveryHashes;
+    }
 }

@@ -100,6 +100,7 @@ class Google2fa extends Tool
      */
     public function authenticate()
     {
+        $data = [];
         if ($recover = Request::get('recover')) {
             if ($this->isRecoveryValid($recover, json_decode(auth()->user()->user2fa->recovery, true)) === false) {
                 $data['error'] = 'Recovery key is invalid.';
@@ -107,30 +108,7 @@ class Google2fa extends Tool
                 return view('google2fa::authenticate', $data);
             }
 
-            $google2fa = new G2fa();
-            $recovery = new Recovery();
-            $secretKey = $google2fa->generateSecretKey();
-            $data['recovery'] = $recovery
-                ->setCount(config('lifeonscreen2fa.recovery_codes.count'))
-                ->setBlocks(config('lifeonscreen2fa.recovery_codes.blocks'))
-                ->setChars(config('lifeonscreen2fa.recovery_codes.chars_in_block'))
-                ->toArray();
-
-            $recoveryHashes = $data['recovery'];
-            array_walk($recoveryHashes, function (&$value) {
-                $value = password_hash($value, config('lifeonscreen2fa.recovery_codes.hashing_algorithm'));
-            });
-
-            $user2faModel = config('lifeonscreen2fa.models.user2fa');
-
-            $user2faModel::where('user_id', auth()->user()->id)->delete();
-            $user2fa = new $user2faModel();
-            $user2fa->user_id = auth()->user()->id;
-            $user2fa->google2fa_secret = $secretKey;
-            $user2fa->recovery = json_encode($recoveryHashes);
-            $user2fa->save();
-
-            return response(view('google2fa::recovery', $data));
+            return $this->showRecoveryView($data);
         }
         if ($this->is2FAValid()) {
             $authenticator = app(Google2FAAuthenticator::class);
@@ -141,5 +119,28 @@ class Google2fa extends Tool
         $data['error'] = 'One time password is invalid.';
 
         return view('google2fa::authenticate', $data);
+    }
+
+    public function showRecoveryView($data = [])
+    {
+        $google2fa = new G2fa();
+        $recovery = new Recovery();
+        $secretKey = $google2fa->generateSecretKey();
+        $data['recovery'] = $recovery
+            ->setCount(config('lifeonscreen2fa.recovery_codes.count'))
+            ->setBlocks(config('lifeonscreen2fa.recovery_codes.blocks'))
+            ->setChars(config('lifeonscreen2fa.recovery_codes.chars_in_block'))
+            ->toArray();
+
+        $user2faModel = config('lifeonscreen2fa.models.user2fa');
+        $user2faModel::where('user_id', auth()->user()->id)->delete();
+
+        $user2fa = new $user2faModel();
+        $user2fa->user_id = auth()->user()->id;
+        $user2fa->google2fa_secret = $secretKey;
+        $user2fa->recovery = json_encode($user2fa->hashRecoveryCodes($data['recovery']));
+        $user2fa->save();
+
+        return response(view('google2fa::recovery', $data));
     }
 }
