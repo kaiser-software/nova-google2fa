@@ -35,8 +35,7 @@
             </p>
             <div class="p-3">
                 <label class="block font-bold mb-2" for="co">Recovery codes
-                    <button class="no-print m-1  btn btn-default btn-primary hover:bg-primary-dark" type="button"
-                            onclick="window.print();return false;">
+                    <button id="printButton" class="no-print m-1  btn btn-default btn-primary hover:bg-primary-dark" type="button">
                         Print
                     </button>
                 </label>

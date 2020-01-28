@@ -20,6 +20,14 @@ var callback = function(){
       document.getElementById('recover_div').style.display = 'block';
     });
   }
+
+  var printButton = document.getElementById('printButton');
+  if (printButton) {
+    printButton.addEventListener('click', function(el) {
+      window.print();
+      return false;
+    })
+  }
 };
 
 if (
